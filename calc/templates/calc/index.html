@@ -1,0 +1,28 @@
+{% block body %}
+    <a href="{% url 'add' %}">登録画面へ</a>{# 追加する #}
+    <a href="{% url 'calc' %}">計算画面へ</a>{# 追加する #}
+    <form method="post" action="">
+    <table border="1">
+      <thead>
+        <tr>
+          <th>hp</th>
+          <th>mp</th>
+          <th>event</th>
+          <th>updated_at</th>
+          <th>　</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for Status in Statuses %}
+          <tr>
+            <td>{{ Status.hp }}</td>
+            <td>{{ Status.mp }}</td>
+            <td>{{ Status.event }}</td>
+            <td>{{ Status.updated_at }}</td>
+            <td><a href="{% url 'edit' Status.id %}">更新画面へ</a></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </form>
+{% endblock %}
