@@ -9,7 +9,7 @@
 {% block title %}電卓{% endblock title %}
 {% block content %}
     <a href="{% url 'index' %}">一覧画面へ</a>
-    <h1>計算機</h1>
+    <h1>HP計算機</h1>
     <form method="post" action="">
         {% csrf_token %}
         <!--<input type="number" name="val1">-->
@@ -18,7 +18,7 @@
         <input type="number" name="dmg">
         <button type="submit"> = </button>
         <label>{{ form.event.label }}{{ form.event }}</label><br/>
-        <h1>前回の答え:</h1>{{ p2hp }}
+        <h1>前回のHP:</h1>{{ p2hp }}
     </form>
 <!--表示は円形のメータで考える(ムカワ案)-->
 {% endblock %}
