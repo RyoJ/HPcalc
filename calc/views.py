@@ -31,6 +31,7 @@ def edit(request, editing_id):
             status.hp = form.cleaned_data['hp']
             status.mp = form.cleaned_data['mp']
             status.event = form.cleaned_data['event']
+            status.ap = status.hp * status.mp/100
             status.save()
             return redirect('index')
     else:

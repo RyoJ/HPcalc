@@ -1,24 +1,17 @@
 {% block body %}
-    <a href="{% url 'add' %}">登録画面へ</a>{# 追加する #}
-    <a href="{% url 'calc' %}">計算画面へ</a>{# 追加する #}
+    <a href="{% url 'add' %}">登録画面へ</a>
+    <a href="{% url 'ap' %}">計算(AP)画面へ</a>
     <form method="post" action="">
     <table border="1">
       <thead>
         <tr>
           <th>ap</th>
-          <th>hp</th>
-          <th>mp</th>
-          <th>event</th>
-          <th>updated_at</th>
-          <th>　</th>
         </tr>
       </thead>
       <tbody>
         {% for Status in Statuses %}
           <tr>
-            <td>{{ Status.ap }}</td>
-            <td>{{ Status.hp }}</td>
-            <td>{{ Status.mp }}</td>
+            <td>{{ ap }}</td>
             <td>{{ Status.event }}</td>
             <td>{{ Status.updated_at }}</td>
             <td><a href="{% url 'edit' Status.id %}">更新画面へ</a></td>
