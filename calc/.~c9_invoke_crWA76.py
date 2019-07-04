@@ -73,9 +73,9 @@ def calc2(request):
         ihp = int(request.POST['hp'])
         imp = int(request.POST['mp'])
         iap = ihp * imp/100
-        ievent = str(request.POST['event'])
+        event = str(request.POST)
     #答えを新しいレコードに記録
-        Status.objects.create(ap=iap, hp=ihp, mp=imp, event=ievent)
+        Status.objects.create(ap=iap, hp=ihp, mp=imp, event=)
         return redirect('index')
         
     d = {

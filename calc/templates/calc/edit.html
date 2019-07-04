@@ -1,9 +1,9 @@
 {% block body %}
     <a href="{% url 'index' %}">一覧画面へ</a>
     <form action="" method="post">
-        <h1>{{ form.hp.label}}{{ form.hp }}</h1>
-        <h1>{{ form.mp.label}}{{ form.mp }}</h1>
-        <h1>{{ form.event.label}}{{ form.event }}</h1>
+        <h1>{{ form.hp.label}}：{{ form.hp }}</h1>
+        <h1>{{ form.mp.label}}：{{ form.mp }}</h1>
+        <h1>{{ form.event.label}}：{{ form.event }}</h1>
         {% csrf_token %}
         <input type="submit" value="登録">
     </form>
