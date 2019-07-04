@@ -66,7 +66,7 @@ def calc(request):
     }
     return render(request, 'calc/calc.html', d)
     
-def calc2(request):
+def apcalc(request):
     #calc2.htmlに入力したものを計算して登録
 
     if request.method == 'POST':#これをしないとcalc.htmlを開いたときに勝手にPOSTしようとする
@@ -81,4 +81,4 @@ def calc2(request):
     d = {
         #'form': form,
     }
-    return render(request, 'calc/calc2.html', d)
+    return render(request, 'calc/ap.html', d)

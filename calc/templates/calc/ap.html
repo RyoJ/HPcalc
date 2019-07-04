@@ -1,23 +1,21 @@
-{% block body %}
-    <a href="{% url 'add' %}">登録画面へ</a>
-    <a href="{% url 'ap' %}">計算(AP)画面へ</a>
+<!--#使用する値
+    hp,mp #ここで入力したものを保存
+
+    #計算
+    ap = int(request.POST['hp'])*int(request.POST['mp']) in views.calc2
+-->
+{% block title %}AP電卓{% endblock title %}
+{% block content %}
+    <a href="{% url 'index' %}">一覧画面へ</a>
+    <h1>AP計算機</h1>
     <form method="post" action="">
-    <table border="1">
-      <thead>
-        <tr>
-          <th>ap</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for Status in Statuses %}
-          <tr>
-            <td>{{ ap }}</td>
-            <td>{{ Status.event }}</td>
-            <td>{{ Status.updated_at }}</td>
-            <td><a href="{% url 'edit' Status.id %}">更新画面へ</a></td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </form>
+        {% csrf_token %}
+        <input type="number" name="hp">
+        X
+        <input type="number" name="mp">
+        <button type="submit"> = </button><br>
+        <input type="text" name="event">
+        <h1>前回のAP:</h1>
+    </form>
+<!--表示は円形のメータで考える(ムカワ案)-->
 {% endblock %}
