@@ -10,12 +10,14 @@
     <h1>AP計算機</h1>
     <form method="post" action="">
         {% csrf_token %}
+        AP = HP X MP =
         <input type="number" name="hp">
         X
         <input type="number" name="mp">
         <button type="submit"> = </button><br>
+        event:
         <input type="text" name="event">
-        <h1>前回のAP:</h1>
+        <h1>前回のステータス:</h1>AP:{{p1ap}},HP:{{ p1hp }},MP:{{ p1mp }},event:{{ p1ev }}
     </form>
 <!--表示は円形のメータで考える(ムカワ案)-->
 {% endblock %}
