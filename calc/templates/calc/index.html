@@ -21,10 +21,32 @@
             <td>{{ Status.mp }}</td>
             <td>{{ Status.event }}</td>
             <td>{{ Status.updated_at }}</td>
-            <td><a href="{% url 'edit' Status.id %}">更新画面へ</a></td>
+            <td><a href="{% url 'edit' pk=Status.pk %}">更新画面へ</a></td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
-  </form>
+    <table border="2">
+      <thead>
+        <tr>
+          <th>lossap</th>
+          <th>dmg</th>
+          <th>lossmp</th>
+          <th>behavior</th>
+          <th>time</th>
+          <th>　</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for Index in Indexes %}
+          <tr>
+            <td>{{ Index.lossap }}</td>
+            <td>{{ Index.dmg }}</td>
+            <td>{{ Index.lossmp }}</td>
+            <td>{{ Index.behaivor }}</td>
+            <td>{{ Index.time }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>  </form>
 {% endblock %}

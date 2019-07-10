@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
-from .models import Status
+from .models import Status, Index
 from .forms import StatusForm
 
 #ANSES：一覧のためのモデルのリスト
@@ -9,10 +9,14 @@ from .forms import StatusForm
 def index(request):
   d = {
       'Statuses': Status.objects.all(),
-      #'Indexes': Index.objects.all(),
+      'Indexes': Index.objects.all(),
   }
   return render(request, 'calc/index.html', d)
 
+def detail(request, pk):
+    status = get_object_or_404(Status, pk=pk)
+    return render(request, 'calc/detail.html', {'status': status})
+    
 def add(request):
     form = StatusForm(request.POST or None)
     if form.is_valid():
@@ -24,10 +28,10 @@ def add(request):
     }
     return render(request, 'calc/edit.html', d)
     
-def edit(request, editing_id):
-    status = get_object_or_404(Status, id=editing_id)
+def edit(request, pk):
+    status = get_object_or_404(Status, pk=pk)
     if request.method == 'POST':
-        form = StatusForm(request.POST)
+        form = StatusForm(request.POST, instance=status)
         if form.is_valid():
             status.hp = form.cleaned_data['hp']
             status.mp = form.cleaned_data['mp']
@@ -37,7 +41,7 @@ def edit(request, editing_id):
             return redirect('index')
     else:
         # GETリクエスト（初期表示）時はDBに保存されているデータをFormに結びつける
-        form = StatusForm({'hp': status.hp},{'mp': status.mp},{'event': status.event})
+        form = StatusForm(instance=status)
     d = {
         'form': form,
     }
