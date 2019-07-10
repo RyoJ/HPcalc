@@ -1,6 +1,6 @@
 {% block body %}
     <a href="{% url 'add' %}">登録画面へ</a>{# 追加する #}
-    <a href="{% url 'ap' %}">計算画面へ</a>{# 追加する #}
+    <a href="{% url 'apc' %}">計算画面へ</a>{# 追加する #}
     <form method="post" action="">
     <table border="1">
       <thead>
@@ -42,7 +42,7 @@
           <tr>
             <td>{{ Index.lossap }}</td>
             <td>{{ Index.dmg }}</td>
-            <td>{{ Index.lossmp }}</td>
+            <td>{{ Index.usemp }}</td>
             <td>{{ Index.behaivor }}</td>
             <td>{{ Index.time }}</td>
           </tr>

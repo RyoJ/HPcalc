@@ -10,5 +10,5 @@ urlpatterns = [
     path('detail/<int:pk>/', views.detail, name='detail'),
 #    path('delete/<int:editing_id>/', views.delete, name='delete'),
     path('calc/', views.calc, name='calc'),
-    path('ap/', views.apcalc, name='ap'),
+    path('apc/', views.apcalc, name='apc'),
 ]

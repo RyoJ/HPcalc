@@ -15,6 +15,7 @@ class Index(models.Model):
     dmg = models.IntegerField(null=True)
     usemp = models.IntegerField(null=True)
     behavior = models.CharField(max_length=100, null=True, blank=True)
-    #time #テーブルを作る時刻から前回のレコードの時刻を引いて求める
+    time = models.DateTimeField(null=True)#テーブルを作る時刻から前回のレコードの時刻を引いて求める
+    
     def __str__(self):
         return u"{0}:{1}... ".format(self.id, self.lossap)

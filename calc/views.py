@@ -1,14 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from .models import Status, Index
-from .forms import StatusForm
+from .forms import StatusForm, IndexForm
+import datetime
 
 #ANSES：一覧のためのモデルのリスト
 #asn：編集のための任意のデータの変数
 
 def index(request):
   d = {
-      'Statuses': Status.objects.all(),
+      'Statuses': Status.objects.order_by('-id'),
       'Indexes': Index.objects.all(),
   }
   return render(request, 'calc/index.html', d)
@@ -55,7 +56,7 @@ def delete(request, editing_id):
     return redirect('index')
 
 #@require_POST    
-def calc(request):
+def calc(request):#apcalcにアプデ
     #使用する値
     #form = ANSForm(request.POST or None)#ここで使用するformを定義
     rStatus = Status.objects.order_by('id').reverse()[:2]#過去2回分のレコードを抽出
@@ -91,14 +92,14 @@ def apcalc(request):
         imp = int(request.POST['mp'])
         iap = ihp * imp/100
         ievent = str(request.POST['event'])
-        #clossap = iap - p1ap
-        #cdmg = ihp - p1hp
-        #clossmp = imp - p1mp
-        #cbehavior = p1ev
-        #time = 
+        clossap = iap - p1ap
+        cdmg = ihp - p1hp
+        cusemp = imp - p1mp
+        cbehavior = p1ev
+        #term = datetime.datetime.now() - p1tm #DateTimeFieldに直したい
     #答えを新しいレコードに記録
         Status.objects.create(ap=iap, hp=ihp, mp=imp, event=ievent)
-        #Index.objects.create(lossap=clossap, dmg=cdmg, lossmp=clossmp, behavior=cbehavior)
+        Index.objects.create(lossap=clossap, dmg=cdmg, usemp=cusemp, behavior=cbehavior)
         return redirect('index')
         
     d = {
@@ -107,5 +108,6 @@ def apcalc(request):
         'p1hp': p1hp,
         'p1mp': p1mp,
         'p1ev': p1ev,
+        'p1tm': p1tm,
     }
     return render(request, 'calc/ap.html', d)
