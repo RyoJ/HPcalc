@@ -6,7 +6,7 @@
 -->
 {% block title %}AP電卓{% endblock title %}
 {% block content %}
-    <a href="{% url 'index' %}">一覧画面へ</a>
+    <a href="{% url 'apcalc:index' %}">一覧画面へ</a>
     <h1>AP計算機</h1>
     <form method="post" action="">
         {% csrf_token %}

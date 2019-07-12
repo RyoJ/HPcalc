@@ -2,7 +2,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from .models import Status, Index
 from .forms import StatusForm, IndexForm
+from django.http import HttpResponse
+import io
 import datetime
+import numpy as np
+import matplotlib.pyplot as plt
 
 #ANSES：一覧のためのモデルのリスト
 #asn：編集のための任意のデータの変数
@@ -22,7 +26,7 @@ def add(request):
     form = StatusForm(request.POST or None)
     if form.is_valid():
       Status.objects.create(**form.cleaned_data)
-      return redirect('index')
+      return redirect('apcalc:index')
 
     d = {
         'form': form,
@@ -39,7 +43,7 @@ def edit(request, pk):
             status.event = form.cleaned_data['event']
             status.ap = status.hp * status.mp/100
             status.save()
-            return redirect('index')
+            return redirect('apcalc:index')
     else:
         # GETリクエスト（初期表示）時はDBに保存されているデータをFormに結びつける
         form = StatusForm(instance=status)
@@ -69,7 +73,7 @@ def calc(request):#apcalcにアプデ
         nhp = p1hp - dmg
     #答えを新しいレコードに記録
         Status.objects.create(hp=nhp)
-        return redirect('index')
+        return redirect('apcalc:index')
         
     d = {
         #'form': form,
@@ -95,12 +99,12 @@ def apcalc(request):
         clossap = iap - p1ap
         cdmg = ihp - p1hp
         cusemp = imp - p1mp
-        cbehavior = p1ev
+        cbehavior = str(p1ev)
         #term = datetime.datetime.now() - p1tm #DateTimeFieldに直したい
     #答えを新しいレコードに記録
         Status.objects.create(ap=iap, hp=ihp, mp=imp, event=ievent)
         Index.objects.create(lossap=clossap, dmg=cdmg, usemp=cusemp, behavior=cbehavior)
-        return redirect('index')
+        return redirect('apcalc:index')
         
     d = {
         'rStatus': rStatus,
@@ -111,3 +115,38 @@ def apcalc(request):
         'p1tm': p1tm,
     }
     return render(request, 'calc/ap.html', d)
+    
+def graph(request):
+    #apv = Status[:10].ap
+    rStatus = Status.objects.all()
+    y=[]#ap
+    x=[]#id
+    for i in range(len(rStatus)):
+        ap=rStatus[i].ap
+        y.append(ap)
+        n=rStatus[i].id
+        x.append(n)
+        
+    ap = np.array(y)
+    num = np.array(x)
+    plt.plot(num, ap)
+    
+    return render(request, 'calc/graph.html')
+    
+#png画像形式に変換数関数
+def plt2png():
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png', dpi=200)
+    s = buf.getvalue()
+    buf.close()
+    return s
+
+#画像埋め込み用view
+def img_plot(request):
+    # matplotを使って作図する
+
+    ax = plt.subplot()
+    png = plt2png()
+    plt.cla()
+    response = HttpResponse(png, content_type='image/png')
+    return response

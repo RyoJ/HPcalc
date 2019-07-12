@@ -1,5 +1,5 @@
 {% block body %}
-    <a href="{% url 'index' %}">一覧画面へ</a>
+    <a href="{% url 'apcalc:index' %}">一覧画面へ</a>
     <form action="" method="post">
         {{ form.as_p }}
         {% csrf_token %}

@@ -1,0 +1,6 @@
+{% block body %}
+    <a href="{% url 'apcalc:add' %}">登録画面へ</a>{# 追加する #}
+    <a href="{% url 'apcalc:apc' %}">計算画面へ</a>{# 追加する #}
+    <a href="{% url 'apcalc:index' %}">一覧画面へ</a>{# 追加する #}
+<img src="{% url 'apcalc:img_plot' %}" alt="">
+{% endblock %}

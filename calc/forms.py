@@ -6,7 +6,7 @@ class StatusForm(forms.ModelForm):
 
     class Meta:
         model = Status
-        fields = ('ap', 'hp', 'mp', 'event')
+        fields = ('hp', 'mp', 'event')
         
 class IndexForm(forms.ModelForm):
 
