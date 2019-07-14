@@ -121,7 +121,7 @@ def graph(request):
     rStatus = Status.objects.all()
     y=[]#ap
     x=[]#id
-    for i in range(len(rStatus)):
+    for i in range(len(rStatus)):#スマートなやり方じゃないかも
         ap=rStatus[i].ap
         y.append(ap)
         n=rStatus[i].id
@@ -136,7 +136,7 @@ def graph(request):
 #png画像形式に変換数関数
 def plt2png():
     buf = io.BytesIO()
-    plt.savefig(buf, format='png', dpi=200)
+    plt.savefig(buf, format='png', dpi=150)
     s = buf.getvalue()
     buf.close()
     return s

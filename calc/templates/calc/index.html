@@ -6,23 +6,23 @@
     <table border="1">
       <thead>
         <tr>
+          <th>id</th>
           <th>ap</th>
           <th>hp</th>
           <th>mp</th>
           <th>event</th>
           <th>updated_at</th>
-          <th>　</th>
         </tr>
       </thead>
       <tbody>
         {% for Status in Statuses %}
           <tr>
+            <td>{{ Status.id }}</td>
             <td>{{ Status.ap }}</td>
             <td>{{ Status.hp }}</td>
             <td>{{ Status.mp }}</td>
-            <td>{{ Status.event }}</td>
+            <td><a href="{% url 'apcalc:edit' pk=Status.pk %}">{{ Status.event }}</a></td>
             <td>{{ Status.updated_at }}</td>
-            <td><a href="{% url 'apcalc:edit' pk=Status.pk %}">更新画面へ</a></td>
           </tr>
         {% endfor %}
       </tbody>
