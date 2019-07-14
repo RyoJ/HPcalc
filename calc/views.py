@@ -114,7 +114,7 @@ def apcalc(request):
         'p1ev': p1ev,
         'p1tm': p1tm,
     }
-    return render(request, 'calc/ap.html', d)
+    return render(request, 'calc/apc.html', d)
     
 def graph(request):
     #apv = Status[:10].ap
