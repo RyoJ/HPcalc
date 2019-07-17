@@ -4,7 +4,7 @@ from .models import Status, Index
 from .forms import StatusForm, IndexForm
 from django.http import HttpResponse
 import io
-import datetime
+from datetime import datetime
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -100,9 +100,13 @@ def apcalc(request):
         cdmg = ihp - p1hp
         cusemp = imp - p1mp
         cbehavior = str(p1ev)
-        #term = datetime.datetime.now() - p1tm #DateTimeFieldに直したい
+        #now= datetime.now()
+        #term = now.timestamp() - p1tm.timestamp() #DateTimeFieldに直したい
     #答えを新しいレコードに記録
         Status.objects.create(ap=iap, hp=ihp, mp=imp, event=ievent)
+        #r2Status = Status.objects.order_by('id').reverse()[:1]#過去1回分のレコードを抽出
+        #tm = r2Status[0].updated_at
+        #term = tm.timestamp() - p1tm.timestamp()
         Index.objects.create(lossap=clossap, dmg=cdmg, usemp=cusemp, behavior=cbehavior)
         return redirect('apcalc:index')
         
@@ -133,6 +137,45 @@ def graph(request):
     
     return render(request, 'calc/graph.html')
     
+def graph_hp(request):
+    rStatus = Status.objects.all()
+    y=[]#hp
+    x=[]#id
+    for i in range(len(rStatus)):#スマートなやり方じゃないかも
+        hp=rStatus[i].hp
+        y.append(hp)
+        n=rStatus[i].id
+        x.append(n)
+        
+    hp = np.array(y)
+    num = np.array(x)
+    plt.plot(num, hp)
+    
+    return render(request, 'calc/graph_hp.html')
+
+def graph_mp(request):
+    rStatus = Status.objects.all()
+    y=[]#hp
+    x=[]#id
+    for i in range(len(rStatus)):#スマートなやり方じゃないかも
+        mp=rStatus[i].mp
+        y.append(mp)
+        n=rStatus[i].id
+        x.append(n)
+        
+    mp = np.array(y)
+    num = np.array(x)
+    plt.plot(num, mp)
+    
+    return render(request, 'calc/graph_mp.html')
+
+def graph_all(request):
+    graph(request)
+    graph_hp(request)
+    graph_mp(request)
+
+    return render(request, 'calc/graph_all.html')
+
 #png画像形式に変換数関数
 def plt2png():
     buf = io.BytesIO()
