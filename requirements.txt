@@ -11,7 +11,7 @@ idna==2.8
 jmespath==0.9.4
 kiwisolver==1.1.0
 matplotlib==3.0.3
-numpy==
+numpy==1.15.4
 pkg-resources==0.0.0
 pyparsing==2.4.0
 python-dateutil==2.8.0
