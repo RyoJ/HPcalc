@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from .models import Status, Index
 from .forms import StatusForm, IndexForm
-from django.http import HttpResponse
 import io
 from datetime import datetime
 import numpy as np
@@ -193,3 +192,76 @@ def img_plot(request):
     plt.cla()
     response = HttpResponse(png, content_type='image/png')
     return response
+
+import neologdn
+import numpy as np
+import MeCab
+import pickle
+
+def corpus(request):
+
+    rStatus = Status.objects.all()
+
+    word_list=[]
+    for i in range(len(rStatus)):#スマートなやり方じゃないかも
+        event=rStatus[i].event
+        word_list.append(event)
+
+    maped_list = map(str, word_list)  #mapで要素すべてを文字列に
+    text = ','.join(maped_list)
+
+    text = neologdn.normalize(text) #ノーマライズ
+    text = text.replace(",", " ")
+    sentences = text.replace("。", " ")
+    phrase = sentences.replace("、"," ")
+    phrase = phrase.replace("「"," ")
+    phrase = phrase.replace("」"," ")
+    #print(phrase) #ちゃんとreplace出来てる
+    #phrase = sentences[0].split('、')
+    #句読点や記号を排除
+
+    mecab= MeCab.Tagger('-Ochasen')
+    node = mecab.parseToNode(phrase)
+    #node = node.feature.split(",") #品詞の原型
+    #分析後のリストの作り方が違う
+    node_list=[]    
+    while node:
+            node_list.append(node.feature.split(",")[6])
+            node = node.next
+
+    word_to_id = {}
+    id_to_word = {}
+    for word in node_list:
+            if word not in word_to_id:#新しい単語を追加するためのコード
+                    new_id = len(word_to_id)
+                    word_to_id[word] = new_id
+                    id_to_word[new_id] = word
+
+    corpus = np.array([word_to_id[w] for w in node_list])
+
+    mydic = [corpus, word_to_id, id_to_word]
+    file_name = 'mydic' + '.pkl'
+    with open(file_name, 'wb') as f:
+            pickle.dump(mydic, f)
+            
+    d = {
+        'corpus': corpus, #リスト形式
+        'id2word': id_to_word, #辞書型
+    }
+    return render(request, 'calc/corpus.html', d)
+
+def test(request): #前回の分を残しておく
+    rStatus = Status.objects.all()
+    word_list=[]
+    for i in range(len(rStatus)):#スマートなやり方じゃないかも
+        event=rStatus[i].event
+        word_list.append(event)
+
+    maped_list = map(str, word_list)  #mapで要素すべてを文字列に
+    text = ','.join(maped_list)
+
+    d = {
+        'rStatus': rStatus,
+        'text': text
+    }
+    return render(request, 'calc/test.html', d)
