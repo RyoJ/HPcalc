@@ -197,8 +197,9 @@ import neologdn
 import numpy as np
 import MeCab
 import pickle
+from gensim.models import word2vec
 
-def corpus(request):
+def corpus(request): #テキストの抽出 #テキストの分割
 
     rStatus = Status.objects.all()
 
@@ -220,14 +221,23 @@ def corpus(request):
     #phrase = sentences[0].split('、')
     #句読点や記号を排除
 
-    mecab= MeCab.Tagger('-Ochasen')
+    mecab= MeCab.Tagger('-Ochasen -d /usr/lib/x86_64-linux-gnu/mecab/dic/mecab-ipadic-neologd')
     node = mecab.parseToNode(phrase)
     #node = node.feature.split(",") #品詞の原型
     #分析後のリストの作り方が違う
     node_list=[]    
     while node:
-            node_list.append(node.feature.split(",")[6])
+            node_list.append(node.feature.split(",")[6]) #品詞を原型に直す
             node = node.next
+    
+    s = node_list #node_listを書き込む
+
+    file_name = 'mywords' + '.pkl' #word2vecで学習させるためのコーパスを保存
+    with open(file_name, 'wb') as f:
+            pickle.dump(s, f)
+    
+    model = word2vec.Word2Vec(s, size=100, min_count=2, window=5)
+    model.save("myw2v.model")
 
     word_to_id = {}
     id_to_word = {}
@@ -250,18 +260,52 @@ def corpus(request):
     }
     return render(request, 'calc/corpus.html', d)
 
-def test(request): #前回の分を残しておく
-    rStatus = Status.objects.all()
-    word_list=[]
-    for i in range(len(rStatus)):#スマートなやり方じゃないかも
-        event=rStatus[i].event
-        word_list.append(event)
+from HPcalc.settings import MODEL_FILE_PATH
 
-    maped_list = map(str, word_list)  #mapで要素すべてを文字列に
-    text = ','.join(maped_list)
+def w2vin(request):
+    if request.method == 'POST':#これをしないとcalc.htmlを開いたときに勝手にPOSTしようとする
+        iwd = str(request.POST['word'])
+
+        model = word2vec.Word2Vec.load(MODEL_FILE_PATH) #wiki.modelじゃないとdef get_vectorが上手く働かない
+
+        #results = model.wv.most_similar(positive=['純粋','悪'],negative=['正義'])
+        results = model.most_similar([iwd])    
+        #results=iwd
+        d={'results':results}
+
+        return render(request, 'calc/w2vout.html', d)
+
+    return render(request, 'calc/w2vin.html')
+
+def w2vout(request):
+    return render(request, 'calc/w2vout.html')
+
+"""
+def test(request): #word2vec
+    
+    自分の語彙と一般的な語彙の乖離を見たい。
+    =>wiki.modelだけで良さそう=>自分の近い語彙で調べて他の言葉を探す
+    0.コーパスファイルをw2vファイルに変換=>ニューラルネットワークを使ったディープラーニングが必要
+    ：(one-hot=>共起行列=>コサイン類似、PPMI=>SVD)=>DeepLearning
+    *PPMIをすると日本の助詞問題も解決するのでは？=>日本語はw2vで行う。英語はdoc2vecへ進む。
+    1．wiki.model(modelファイル)を使ったword2vec
+    2．mydic.pklを使ったword2vec
+    2-1. 入出力画面の作成
+    2-2. urlの作成
+    2-3. コードの作成, ref:def apcalc
+    
+
+    if request.method == 'POST':#これをしないとcalc.htmlを開いたときに勝手にPOSTしようとする
+        iwd = str(request.POST['word'])
+
+    model = word2vec.Word2Vec.load(MODEL_FILE_PATH) #wiki.modelじゃないとdef get_vectorが上手く働かない
+
+    #results = model.wv.most_similar(positive=['純粋','悪'],negative=['正義'])
+    results = model.most_similar([iwd])
 
     d = {
-        'rStatus': rStatus,
-        'text': text
+        'results': results
     }
-    return render(request, 'calc/test.html', d)
+
+    return render(request, 'calc/w2vout.html', d)
+"""

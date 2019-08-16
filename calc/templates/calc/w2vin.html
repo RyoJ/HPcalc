@@ -1,0 +1,12 @@
+{% block title %}word2vec In{% endblock title %}
+{% block content %}
+    <a href="{% url 'apcalc:index' %}">一覧画面へ</a>
+    <h1>AP計算機</h1>
+    <form method="post" action="">
+        {% csrf_token %}
+        探したい言葉：
+        <input type="text" name="word", size="70">
+        <h1>前回のステータス:</h1>AP:{{p1ap}},HP:{{ p1hp }},MP:{{ p1mp }},event:{{ p1ev }}
+    </form>
+<!--表示は円形のメータで考える(ムカワ案)-->
+{% endblock %}

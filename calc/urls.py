@@ -20,6 +20,9 @@ urlpatterns = [
     path('analysis/plot/', views.img_plot, name="img_plot"),
 #コーパス
     path('corpus/', views.corpus, name='corpus'),
+#word2vec
+    path('w2vin/', views.w2vin, name='w2vin'),
+    path('w2vout/', views.w2vout, name='w2vout'),
 #テスト画面
-    path('test/', views.test, name='test'),
+    #path('test/', views.test, name='test'),
 ]

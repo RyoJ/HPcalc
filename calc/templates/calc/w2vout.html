@@ -1,0 +1,7 @@
+{% block title %}word2vec out{% endblock title %}
+{% block content %}
+    <a href="{% url 'apcalc:index' %}">一覧画面へ</a>
+    {% for result in results %}
+    <p>{{ result }}</p>
+    {% endfor %}
+{% endblock %}
