@@ -17,11 +17,12 @@ urlpatterns = [
     path('graph_hp/', views.graph_hp, name='graph_hp'),
     path('graph_mp/', views.graph_mp, name='graph_mp'),
     path('graph_all/', views.graph_all, name='graph_all'),
-    path('analysis/plot/', views.img_plot, name="img_plot"),
+    path('analysis/plot/', views.img_plot, name='img_plot'),
 #コーパス
     path('corpus/', views.corpus, name='corpus'),
 #word2vec
     path('w2vin/', views.w2vin, name='w2vin'),
+    path('myw2vin/', views.myw2vin, name='myw2vin'),
     path('w2vout/', views.w2vout, name='w2vout'),
 #テスト画面
     #path('test/', views.test, name='test'),

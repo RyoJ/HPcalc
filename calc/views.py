@@ -6,6 +6,7 @@ import io
 from datetime import datetime
 import numpy as np
 import matplotlib.pyplot as plt
+import codecs
 
 #ANSES：一覧のためのモデルのリスト
 #asn：編集のための任意のデータの変数
@@ -138,9 +139,9 @@ def graph(request):
     
 def graph_hp(request):
     rStatus = Status.objects.all()
-    y=[]#hp
-    x=[]#id
-    for i in range(len(rStatus)):#スマートなやり方じゃないかも
+    y=[] #hp
+    x=[] #id
+    for i in range(len(rStatus)): #スマートなやり方じゃないかも
         hp=rStatus[i].hp
         y.append(hp)
         n=rStatus[i].id
@@ -154,9 +155,9 @@ def graph_hp(request):
 
 def graph_mp(request):
     rStatus = Status.objects.all()
-    y=[]#hp
-    x=[]#id
-    for i in range(len(rStatus)):#スマートなやり方じゃないかも
+    y=[] #hp
+    x=[] #id
+    for i in range(len(rStatus)): #スマートなやり方じゃないかも
         mp=rStatus[i].mp
         y.append(mp)
         n=rStatus[i].id
@@ -198,31 +199,50 @@ import numpy as np
 import MeCab
 import pickle
 from gensim.models import word2vec
+import re
 
 def corpus(request): #テキストの抽出 #テキストの分割
 
     rStatus = Status.objects.all()
-
-    word_list=[]
+    Owakati= MeCab.Tagger('-Owakati -d /usr/lib/x86_64-linux-gnu/mecab/dic/mecab-ipadic-neologd')
+    Ochasen= MeCab.Tagger('-Ochasen -d /usr/lib/x86_64-linux-gnu/mecab/dic/mecab-ipadic-neologd')
+    
+    word_list=[] #短文をリストにして、それを大きなリストに入れる
     for i in range(len(rStatus)):#スマートなやり方じゃないかも
         event=rStatus[i].event
+        event=Owakati.parse(event)
+        event=str(event)
+        event=event.replace('\n','')
+        event=[event]
         word_list.append(event)
+    #print('word_list:',word_list)
 
+    corpus=[] #短文を分節に分ける
+    for i in range(len(word_list)):
+        sentence=word_list[i][0]
+        sentence=[i for i in re.split(r' ',sentence) if i !=''] #r = [i for i in re.split(r':',str1) if i != '']
+        corpus.append(sentence)      
+        #word_list[i][0]=sentence
+        #node = Ochasen.parseToNode(sentence)
+        #corpus.append(node.feature.split(",")[6])
+        #print('sentence:',sentence) #ex.['事業所 で コミュニケーション ']=>['事業所','で','コミュニケーション']
+    #print('corpus:', corpus) #corpus=[['test'], ['テスト', 'で', 'いろいろ', '書き込ん', 'で', 'みる'],...[]]
+    """
     maped_list = map(str, word_list)  #mapで要素すべてを文字列に
     text = ','.join(maped_list)
-
+    
     text = neologdn.normalize(text) #ノーマライズ
+    #print(text)
     text = text.replace(",", " ")
     sentences = text.replace("。", " ")
     phrase = sentences.replace("、"," ")
     phrase = phrase.replace("「"," ")
     phrase = phrase.replace("」"," ")
-    #print(phrase) #ちゃんとreplace出来てる
+    #print(phrase) #ちゃんとreplace出来てる #ノーマライズだけで充分
     #phrase = sentences[0].split('、')
     #句読点や記号を排除
-
-    mecab= MeCab.Tagger('-Ochasen -d /usr/lib/x86_64-linux-gnu/mecab/dic/mecab-ipadic-neologd')
-    node = mecab.parseToNode(phrase)
+    """
+    """
     #node = node.feature.split(",") #品詞の原型
     #分析後のリストの作り方が違う
     node_list=[]    
@@ -230,26 +250,37 @@ def corpus(request): #テキストの抽出 #テキストの分割
             node_list.append(node.feature.split(",")[6]) #品詞を原型に直す
             node = node.next
     
+    #print(node_list)
+    
+    wakati = []
+    for word in node_list:
+    
     s = node_list #node_listを書き込む
-
+    """
+    """
     file_name = 'mywords' + '.pkl' #word2vecで学習させるためのコーパスを保存
     with open(file_name, 'wb') as f:
             pickle.dump(s, f)
-    
-    model = word2vec.Word2Vec(s, size=100, min_count=2, window=5)
+    """
+    model = word2vec.Word2Vec(corpus, size=100, min_count=2, window=2) #毎回作り直してる
     model.save("myw2v.model")
 
     word_to_id = {}
     id_to_word = {}
-    for word in node_list:
+    for sentence in corpus:
+        for word in sentence:
             if word not in word_to_id:#新しい単語を追加するためのコード
                     new_id = len(word_to_id)
                     word_to_id[word] = new_id
                     id_to_word[new_id] = word
-
-    corpus = np.array([word_to_id[w] for w in node_list])
-
-    mydic = [corpus, word_to_id, id_to_word]
+    #print('id',id_to_word)
+    #print('word',word_to_id)
+    corpus2=[]
+    for i in range(len(corpus)):
+        s_corpus = np.array([word_to_id[w] for w in corpus[i]])
+        corpus2.append(s_corpus)
+    #print(corpus2) #[array([0]), array([1]), array([2, 3, 4]), array([5]), array([ 6,  7,  8,  9, 10, 11]), ...])]
+    mydic = [corpus, corpus2, word_to_id, id_to_word]
     file_name = 'mydic' + '.pkl'
     with open(file_name, 'wb') as f:
             pickle.dump(mydic, f)
@@ -260,13 +291,28 @@ def corpus(request): #テキストの抽出 #テキストの分割
     }
     return render(request, 'calc/corpus.html', d)
 
-from HPcalc.settings import MODEL_FILE_PATH
+from HPcalc.settings import MODEL_FILE_PATH1, MODEL_FILE_PATH2
 
 def w2vin(request):
     if request.method == 'POST':#これをしないとcalc.htmlを開いたときに勝手にPOSTしようとする
         iwd = str(request.POST['word'])
 
-        model = word2vec.Word2Vec.load(MODEL_FILE_PATH) #wiki.modelじゃないとdef get_vectorが上手く働かない
+        model = word2vec.Word2Vec.load(MODEL_FILE_PATH1) #wiki.modelじゃないとdef get_vectorが上手く働かない
+
+        #results = model.wv.most_similar(positive=['純粋','悪'],negative=['正義'])
+        results = model.most_similar([iwd])    
+        #results=iwd
+        d={'results':results}
+
+        return render(request, 'calc/w2vout.html', d)
+
+    return render(request, 'calc/w2vin.html')
+
+def myw2vin(request):
+    if request.method == 'POST':#これをしないとcalc.htmlを開いたときに勝手にPOSTしようとする
+        iwd = str(request.POST['word'])
+
+        model = word2vec.Word2Vec.load(MODEL_FILE_PATH2) #自分のコーパスより、myw2v.modelから
 
         #results = model.wv.most_similar(positive=['純粋','悪'],negative=['正義'])
         results = model.most_similar([iwd])    

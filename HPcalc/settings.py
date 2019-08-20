@@ -14,7 +14,8 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MODEL_FILE_PATH = os.path.join(BASE_DIR, 'word2vec.gensim.model') #word2vecモデルを使用するときのパス #シロヤギさんのモデル
+MODEL_FILE_PATH1 = os.path.join(BASE_DIR, 'word2vec.gensim.model') #word2vecモデルを使用するときのパス #シロヤギさんのモデル
+MODEL_FILE_PATH2 = os.path.join(BASE_DIR, 'myw2v.model') #
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
