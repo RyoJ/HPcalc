@@ -9,3 +9,4 @@ pythonanywhereへのdeploy失敗：nympyが上手くインストール出来な�
 * 参考；git hubの書き方：https://qiita.com/do7be/items/d21405a3d243dde37f92
 # Ver.2:Corpusを導入
 ## Ver.2.1:Word2Vecを導入。シロヤギモデル
+## Ver.2.2:MyCorpusW2Vモデルを実装。
