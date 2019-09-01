@@ -201,7 +201,59 @@ import pickle
 from gensim.models import word2vec
 import re
 
-def corpus(request): #テキストの抽出 #テキストの分割
+def wakati(request):
+    rStatus = Status.objects.all()
+    tagger = MeCab.Tagger(' -d /usr/lib/x86_64-linux-gnu/mecab/dic/mecab-ipadic-neologd')
+    tagger.parse('') 
+
+    corpus = []
+    for i in range(len(rStatus)):#スマートなやり方じゃないかも
+        event=rStatus[i].event
+        if event is not None:
+            node = tagger.parseToNode(event)
+        else:
+            continue
+        #print(event)
+        word_list = []
+        while node :
+            pos = node.feature.split(",")[0]
+            if pos in ["名詞", "動詞", "形容詞"]:   # 対象とする品詞
+                word = node.feature.split(",")[6]
+                word_list.append(word)
+            node = node.next
+        corpus.append(word_list)
+    #print(corpus) #[['起床'], ['朝食'], ['自作', 'アプリ', '作成'], ['test'], ['グラフ', '見る', 'やすい', 'よう'], ['昼食'], 
+    
+    model = word2vec.Word2Vec(corpus, size=100, min_count=2, window=2) #毎回作り直してる
+    model.save("myw2v.model")
+
+    word_to_id = {}
+    id_to_word = {}
+    for sentence in corpus:
+        for word in sentence:
+            if word not in word_to_id:#新しい単語を追加するためのコード
+                    new_id = len(word_to_id)
+                    word_to_id[word] = new_id
+                    id_to_word[new_id] = word
+    #print('id',id_to_word)
+    #print('word',word_to_id)
+    corpus2=[]
+    for i in range(len(corpus)):
+        s_corpus = np.array([word_to_id[w] for w in corpus[i]])
+        corpus2.append(s_corpus)
+    #print(corpus2) #[array([0]), array([1]), array([2, 3, 4]), array([5]), array([ 6,  7,  8,  9, 10, 11]), ...])]
+    mydic = [corpus, corpus2, word_to_id, id_to_word]
+    file_name = 'mydic' + '.pkl'
+    with open(file_name, 'wb') as f:
+            pickle.dump(mydic, f)
+            
+    d = {
+        'corpus': corpus, #リスト形式
+        'id2word': id_to_word, #辞書型
+    }
+    return render(request, 'calc/corpus.html', d)   
+    """
+def corpus(request): #テキストの抽出 #テキストの分割 #wakatiを使用中
 
     rStatus = Status.objects.all()
     Owakati= MeCab.Tagger('-Owakati -d /usr/lib/x86_64-linux-gnu/mecab/dic/mecab-ipadic-neologd')
@@ -232,6 +284,7 @@ def corpus(request): #テキストの抽出 #テキストの分割
         #corpus.append(node.feature.split(",")[6])
         #print('sentence:',sentence) #ex.['事業所 で コミュニケーション ']=>['事業所','で','コミュニケーション']
     #print('corpus:', corpus) #corpus=[['test'], ['テスト', 'で', 'いろいろ', '書き込ん', 'で', 'みる'],...[]]
+    """
     """
     maped_list = map(str, word_list)  #mapで要素すべてを文字列に
     text = ','.join(maped_list)
@@ -269,7 +322,7 @@ def corpus(request): #テキストの抽出 #テキストの分割
     with open(file_name, 'wb') as f:
             pickle.dump(s, f)
     """
-    
+    """    
     model = word2vec.Word2Vec(corpus, size=100, min_count=2, window=2) #毎回作り直してる
     model.save("myw2v.model")
 
@@ -298,7 +351,7 @@ def corpus(request): #テキストの抽出 #テキストの分割
         'id2word': id_to_word, #辞書型
     }
     return render(request, 'calc/corpus.html', d)
-
+    """
 from HPcalc.settings import MODEL_FILE_PATH1, MODEL_FILE_PATH2
 
 def w2vin(request):

@@ -19,7 +19,7 @@ urlpatterns = [
     path('graph_all/', views.graph_all, name='graph_all'),
     path('analysis/plot/', views.img_plot, name='img_plot'),
 #コーパス
-    path('corpus/', views.corpus, name='corpus'),
+    path('corpus/', views.wakati, name='corpus'),
 #word2vec
     path('w2vin/', views.w2vin, name='w2vin'),
     path('myw2vin/', views.myw2vin, name='myw2vin'),
