@@ -207,20 +207,25 @@ def corpus(request): #テキストの抽出 #テキストの分割
     Owakati= MeCab.Tagger('-Owakati -d /usr/lib/x86_64-linux-gnu/mecab/dic/mecab-ipadic-neologd')
     Ochasen= MeCab.Tagger('-Ochasen -d /usr/lib/x86_64-linux-gnu/mecab/dic/mecab-ipadic-neologd')
     
-    word_list=[] #短文をリストにして、それを大きなリストに入れる
+    node_list=[]
+    word_list=[] #短文の集まりのリスト
     for i in range(len(rStatus)):#スマートなやり方じゃないかも
         event=rStatus[i].event
+        #event=neologdn.normalize(event) #エラーが出る
         event=Owakati.parse(event)
+        #node=Owakati.parseToNode(event)
+        #node_list.append(node)
         event=str(event)
         event=event.replace('\n','')
         event=[event]
         word_list.append(event)
     #print('word_list:',word_list)
-
+    
     corpus=[] #短文を分節に分ける
     for i in range(len(word_list)):
         sentence=word_list[i][0]
         sentence=[i for i in re.split(r' ',sentence) if i !=''] #r = [i for i in re.split(r':',str1) if i != '']
+        #sentence=sentence.split(" ") #=>空の要素''が残る
         corpus.append(sentence)      
         #word_list[i][0]=sentence
         #node = Ochasen.parseToNode(sentence)
@@ -251,10 +256,12 @@ def corpus(request): #テキストの抽出 #テキストの分割
             node = node.next
     
     #print(node_list)
-    
+    """
+    """
     wakati = []
     for word in node_list:
-    
+    """
+    """
     s = node_list #node_listを書き込む
     """
     """
@@ -262,6 +269,7 @@ def corpus(request): #テキストの抽出 #テキストの分割
     with open(file_name, 'wb') as f:
             pickle.dump(s, f)
     """
+    
     model = word2vec.Word2Vec(corpus, size=100, min_count=2, window=2) #毎回作り直してる
     model.save("myw2v.model")
 
