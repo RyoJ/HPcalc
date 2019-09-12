@@ -1,4 +1,4 @@
-#!/mnt/c/Users/tan0r/Desktop/program/apps/heroku-django/HPcalc/ve4hp/bin/python3
+#!/mnt/d/desktop/program/apps/heroku-django/HPcalc/ve4hp/bin/python3
 
 # $Id: rst2latex.py 5905 2009-04-16 12:04:49Z milde $
 # Author: David Goodger <goodger@python.org>

@@ -29,7 +29,7 @@ end
 # unset irrelevant variables
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/mnt/c/Users/tan0r/Desktop/program/apps/heroku-django/HPcalc/ve4hp"
+set -gx VIRTUAL_ENV "/mnt/d/desktop/program/apps/heroku-django/HPcalc/ve4hp"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH

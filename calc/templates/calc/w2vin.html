@@ -1,11 +1,11 @@
 {% block title %}word2vec In{% endblock title %}
 {% block content %}
     <a href="{% url 'apcalc:index' %}">一覧画面へ</a>
+    <a href="{% url 'apcalc:w2v_corpus' %}">w2v辞書一覧</a>
     <h1>類似語検索</h1>
     <form method="post" action="">
         {% csrf_token %}
         探したい言葉：
         <input type="text" name="word", size="70">
     </form>
-<!--表示は円形のメータで考える(ムカワ案)-->
 {% endblock %}

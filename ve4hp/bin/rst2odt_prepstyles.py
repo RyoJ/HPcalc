@@ -1,4 +1,4 @@
-#!/mnt/c/Users/tan0r/Desktop/program/apps/heroku-django/HPcalc/ve4hp/bin/python3
+#!/mnt/d/desktop/program/apps/heroku-django/HPcalc/ve4hp/bin/python3
 
 # $Id: rst2odt_prepstyles.py 5839 2009-01-07 19:09:28Z dkuhlman $
 # Author: Dave Kuhlman <dkuhlman@rexx.com>

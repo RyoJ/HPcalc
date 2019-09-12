@@ -1,9 +1,13 @@
 {% block title %}word2vec out{% endblock title %}
 {% block content %}
     <a href="{% url 'apcalc:index' %}">一覧画面へ</a>
-    <a href="{% url 'apcalc:w2vin' %}">wikiW2V</a>
-    <a href="{% url 'apcalc:myw2vin' %}">MyW2V</a>
-    {% for result in results %}
+    <a href="{% url 'apcalc:w2vin' %}">W2V</a>
+    <h1>wiki</h1>
+    {% for result in results1 %}
+    <p>{{ result }}</p>
+    {% endfor %}
+    <h1>MyDic</h1>
+    {% for result in results2 %}
     <p>{{ result }}</p>
     {% endfor %}
 {% endblock %}

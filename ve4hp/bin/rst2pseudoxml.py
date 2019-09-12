@@ -1,4 +1,4 @@
-#!/mnt/c/Users/tan0r/Desktop/program/apps/heroku-django/HPcalc/ve4hp/bin/python3
+#!/mnt/d/desktop/program/apps/heroku-django/HPcalc/ve4hp/bin/python3
 
 # $Id: rst2pseudoxml.py 4564 2006-05-21 20:44:42Z wiemann $
 # Author: David Goodger <goodger@python.org>
