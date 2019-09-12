@@ -92,8 +92,19 @@ def apcalc(request):
     p1tm = rStatus[0].updated_at
     
     if request.method == 'POST':#これをしないとcalc.htmlを開いたときに勝手にPOSTしようとする
-        ihp = int(request.POST['hp'])
-        imp = int(request.POST['mp'])
+        #ihp = int(request.POST['hp'])
+        #imp = int(request.POST['mp'])
+        ifood = int(request.POST['food'])
+        imedicine = int(request.POST['medicine'])
+        isleep = int(request.POST['sleep'])
+        ihappy = int(request.POST['happy'])
+        istress = int(request.POST['stress'])
+        iworry = int(request.POST['worry'])
+        iiritate = int(request.POST['iritate'])
+        irefuresh = int(request.POST['refuresh'])
+        itired = ((ihappy+irefuresh)+((6-istress)+(6-iworry)+(6-iiritate)))/5
+        ihp = 100 * (((ifood/3)+(isleep/7))/2)
+        imp = 100 * itired/5
         iap = ihp * imp/100
         ievent = str(request.POST['event'])
         clossap = iap - p1ap
@@ -103,7 +114,7 @@ def apcalc(request):
         #now= datetime.now()
         #term = now.timestamp() - p1tm.timestamp() #DateTimeFieldに直したい
     #答えを新しいレコードに記録
-        Status.objects.create(ap=iap, hp=ihp, mp=imp, event=ievent)
+        Status.objects.create(ap=iap, hp=ihp,food=ifood, medicine=imedicine, sleep=isleep, happy=ihappy, stress=istress , worry=iworry, iritate=iiritate, tired=itired, refuresh=irefuresh, mp=imp, event=ievent)
         #r2Status = Status.objects.order_by('id').reverse()[:1]#過去1回分のレコードを抽出
         #tm = r2Status[0].updated_at
         #term = tm.timestamp() - p1tm.timestamp()

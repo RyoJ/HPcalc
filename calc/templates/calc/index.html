@@ -12,6 +12,15 @@
           <th>ap</th>
           <th>hp</th>
           <th>mp</th>
+          <th>food</th>
+          <th>medicine</th>
+          <th>sleep</th>
+          <th>happy</th>
+          <th>stress</th>
+          <th>worry</th>
+          <th>iritate</th>
+          <th>tired</th>
+          <th>refuresh</th>
           <th>event</th>
           <th>updated_at</th>
         </tr>
@@ -23,6 +32,15 @@
             <td>{{ Status.ap }}</td>
             <td>{{ Status.hp }}</td>
             <td>{{ Status.mp }}</td>
+            <td>{{ Status.food }}</td>
+            <td>{{ Status.medicine }}</td>
+            <td>{{ Status.sleep }}</td>
+            <td>{{ Status.happy }}</td>
+            <td>{{ Status.stress }}</td>
+            <td>{{ Status.worry }}</td>
+            <td>{{ Status.iritate }}</td>
+            <td>{{ Status.tired }}</td>
+            <td>{{ Status.refuresh }}</td>
             <td><a href="{% url 'apcalc:edit' pk=Status.pk %}">{{ Status.event }}</a></td>
             <td>{{ Status.updated_at }}</td>
           </tr>

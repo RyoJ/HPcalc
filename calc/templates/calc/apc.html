@@ -10,13 +10,25 @@
     <h1>AP計算機</h1>
     <form method="post" action="">
         {% csrf_token %}
-        AP = HP X MP =
-        <input type="number" name="hp">
-        x
-        <input type="number" name="mp">
-        <button type="submit"> = </button><br>
+        food:
+        <input type="number" name="food">
+        medicine:
+        <input type="number" name="medicine">
+        sleep:
+        <input type="number" name="sleep">
+        happy:
+        <input type="number" name="happy">
+        stress:
+        <input type="number" name="stress">
+        worry:
+        <input type="number" name="worry">
+        iritate:
+        <input type="number" name="iritate">
+        refuresh:
+        <input type="number" name="refuresh">
         event:
         <input type="text" name="event", size="70">
+        <button type="submit"> 入力 </button><br>
         <h1>前回のステータス:</h1>AP:{{p1ap}},HP:{{ p1hp }},MP:{{ p1mp }},event:{{ p1ev }}
     </form>
 <!--表示は円形のメータで考える(ムカワ案)-->
