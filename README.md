@@ -12,3 +12,4 @@ pythonanywhereへのdeploy失敗：nympyが上手くインストール出来な�
 ## Ver.2.2:MyCorpusW2Vモデルを実装。
 ### Ver.2.2.1:Mydicに新しいcorpusを使用。分かち書きにparseToNodeを使用。
 # Ver.3:HPに下位項目3個、MPに下位項目5個追加
+#test: add braanch newsomething
